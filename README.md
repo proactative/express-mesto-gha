@@ -14,3 +14,5 @@
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## [Link to the project](https://github.com/proactative/express-mesto-gha)
