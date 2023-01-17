@@ -17,7 +17,7 @@ const getUserById = (req, res) => {
       return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден.' });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные пользователя.' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
@@ -48,6 +48,7 @@ const createUser = (req, res) => {
 const updateUser = (req, res) => {
   User.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
+    runValidators: true,
   })
     .then((user) => {
       if (user) {
