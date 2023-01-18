@@ -26,7 +26,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (card) {
-        res.send({ message: 'Карточка успешно удалена.' });
+        return res.send({ message: 'Карточка успешно удалена.' });
       }
       return res.status(NOT_FOUND).send({ message: 'Запрашиваемая карточка не найдена.' });
     })

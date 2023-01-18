@@ -34,7 +34,6 @@ const createUser = (req, res) => {
     about,
     avatar,
   })
-    .then((user) => user.toObject())
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -57,7 +56,7 @@ const updateUser = (req, res) => {
       return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден.' });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные пользователя.' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
