@@ -79,10 +79,11 @@ const createUser = (req, res, next) => {
       _id: user._id,
     }))
     .catch((err) => {
+      if (err.code === 11000) {
+        throw new ConflictError({ message: 'Пользователь с такой почтой уже зарегистрирован.' });
+      }
       if (err.name === 'ValidationError') {
         throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
-      } else if (err.code === 11000) {
-        throw new ConflictError({ message: 'Пользователь с такой почтой уже зарегистрирован.' });
       }
       return next(err);
     });
