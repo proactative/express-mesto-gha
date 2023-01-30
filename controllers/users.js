@@ -1,50 +1,89 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const NotFoundError = require('../errors/not-found-error');
+const ValidationError = require('../errors/validation-error');
+const ConflictError = require('../errors/conflict-error');
+const UnauthorisedError = require('../errors/unauthorized-error');
 
-const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR } = require('../utils/error-constants');
+const login = (req, res, next) => {
+  const { email, password } = req.body;
 
-const getAllUsers = (req, res) => {
-  User.find({})
-    .then((data) => res.send(data))
-    .catch(() => res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' }));
+  User.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        throw new UnauthorisedError({ message: 'Неправильные почта или пароль.' }); // ошибка при проверке почты
+      }
+      return { matched: bcrypt.compare(password, user.password), user };
+    })
+    .then(({ matched, user }) => {
+      if (!matched) {
+        throw new UnauthorisedError({ message: 'Неправильные почта или пароль' }); // ошибка при проверке пароля
+      }
+      const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' },
+      );
+      return res.send({ token });
+    })
+    .catch(next);
 };
 
-const getUserById = (req, res) => {
+const getAllUsers = (req, res, next) => {
+  User.find({})
+    .then((data) => res.send(data))
+    .catch(next);
+};
+
+const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (user) {
         return res.send(user);
       }
-      return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден.' });
+      throw new NotFoundError({ message: 'Запрашиваемый пользователь не найден.' });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные пользователя.' });
+        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
+      return next(err);
     });
 };
 
-const createUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => res.send(user))
+    .catch(next);
+};
+
+const createUser = (req, res, next) => {
   const {
-    name, about, avatar,
+    name, about, avatar, email, password,
   } = req.body;
 
-  User.create({
-    name,
-    about,
-    avatar,
-  })
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные пользователя.' });
+        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
+      } else if (err.code === 11000) {
+        throw new ConflictError({ message: 'Пользователь с такой почтой уже зарегистрирован.' });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
+      return next(err);
     });
 };
 
 // for updating user & avatar
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
     runValidators: true,
@@ -53,16 +92,16 @@ const updateUser = (req, res) => {
       if (user) {
         return res.send(user);
       }
-      return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден.' });
+      throw new NotFoundError({ message: 'Запрашиваемый пользователь не найден.' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные пользователя.' });
+        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Ошибка по умолчанию.' });
+      return next(err);
     });
 };
 
 module.exports = {
-  getAllUsers, getUserById, createUser, updateUser,
+  getAllUsers, getUserById, createUser, updateUser, login, getCurrentUser,
 };
