@@ -55,6 +55,15 @@ const validateCardCreate = celebrate(
   },
 );
 
+const validateUserId = celebrate(
+  {
+    params: Joi.object().keys({
+      userId: Joi.string().hex().length(24),
+      // email: Joi.string().required().email(),
+    }),
+  },
+);
+
 module.exports = {
   validateLogin,
   validateRegister,
@@ -62,4 +71,5 @@ module.exports = {
   validateAvatarUpdate,
   validateToken,
   validateCardCreate,
+  validateUserId,
 };

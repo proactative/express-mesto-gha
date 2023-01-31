@@ -48,7 +48,7 @@ const getUserById = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные пользователя.'));
       }
-      return next(err);
+      next(err);
     });
 };
 
