@@ -17,7 +17,7 @@ const createCard = (req, res, next) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные карточки.' });
+        next(new ValidationError('Переданы некорректные данные карточки.'));
       }
       return next(err);
     });
@@ -31,13 +31,13 @@ const deleteCard = (req, res, next) => {
     .orFail(new NotFoundError('Запрашиваемая карточка не найдена.')) // если БД возвращает пустой обьект
     .then((card) => {
       if (String(card.owner) !== userId) {
-        throw new ForbiddenError({ message: 'Удалить карточку может только владелец.' });
+        throw new ForbiddenError('Удалить карточку может только владелец.');
       }
-      res.send({ message: 'Карточка успешно удалена.' });
+      res.send('Карточка успешно удалена.');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные карточки.' });
+        next(new ValidationError('Переданы некорректные данные карточки.'));
       }
       next(err);
     });
@@ -54,11 +54,11 @@ const putLike = (req, res, next) => {
       if (card) {
         return res.send(card);
       }
-      throw new NotFoundError({ message: 'Запрашиваемая карточка не найдена.' });
+      throw new NotFoundError('Запрашиваемая карточка не найдена.');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные карточки.' });
+        next(new ValidationError('Переданы некорректные данные карточки.'));
       }
       return next(err);
     });
@@ -75,11 +75,11 @@ const deleteLike = (req, res, next) => {
       if (card) {
         return res.send(card);
       }
-      throw new NotFoundError({ message: 'Запрашиваемая карточка не найдена.' });
+      throw new NotFoundError('Запрашиваемая карточка не найдена.');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные карточки.' });
+        next(new ValidationError('Переданы некорректные данные карточки.'));
       }
       return next(err);
     });

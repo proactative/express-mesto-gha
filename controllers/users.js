@@ -12,13 +12,13 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorisedError({ message: 'Неправильные почта или пароль.' }); // ошибка при проверке почты
+        throw new UnauthorisedError('Неправильные почта или пароль.'); // ошибка при проверке почты
       }
       return { matched: bcrypt.compare(password, user.password), user };
     })
     .then(({ matched, user }) => {
       if (!matched) {
-        throw new UnauthorisedError({ message: 'Неправильные почта или пароль' }); // ошибка при проверке пароля
+        throw new UnauthorisedError('Неправильные почта или пароль'); // ошибка при проверке пароля
       }
       const token = jwt.sign(
         { _id: user._id },
@@ -42,11 +42,11 @@ const getUserById = (req, res, next) => {
       if (user) {
         return res.send(user);
       }
-      throw new NotFoundError({ message: 'Запрашиваемый пользователь не найден.' });
+      throw new NotFoundError('Запрашиваемый пользователь не найден.');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
+        next(new ValidationError('Переданы некорректные данные пользователя.'));
       }
       return next(err);
     });
@@ -83,7 +83,7 @@ const createUser = (req, res, next) => {
         next(new ConflictError('Пользователь с такой почтой уже зарегистрирован.'));
       }
       if (err.name === 'ValidationError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
+        next(new ValidationError('Переданы некорректные данные пользователя.'));
       }
       return next(err);
     });
@@ -99,11 +99,11 @@ const updateUser = (req, res, next) => {
       if (user) {
         return res.send(user);
       }
-      throw new NotFoundError({ message: 'Запрашиваемый пользователь не найден.' });
+      throw new NotFoundError('Запрашиваемый пользователь не найден.');
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new ValidationError({ message: 'Переданы некорректные данные пользователя.' });
+        next(new ValidationError('Переданы некорректные данные пользователя.'));
       }
       return next(err);
     });
