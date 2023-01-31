@@ -13,7 +13,7 @@ const errorMiddleware = require('./middlewares/error');
 const { validateLogin, validateRegister, validateToken } = require('./middlewares/validation');
 
 const app = express();
-const { PORT = 3000, PATH_MONGO = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
+const { PORT = 3000, PATH_MONGO = 'mongodb://127.0.0.1:27017/mestodbbbb' } = process.env;
 
 mongoose.set('strictQuery', false);
 
