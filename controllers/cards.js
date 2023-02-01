@@ -25,7 +25,7 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  const { userId } = req.user._id;
+  const userId = req.user._id;
 
   Card.findByIdAndRemove(cardId)
     .orFail(new NotFoundError('Запрашиваемая карточка не найдена.')) // если БД возвращает пустой обьект
