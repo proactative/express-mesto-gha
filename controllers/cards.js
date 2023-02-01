@@ -33,7 +33,7 @@ const deleteCard = (req, res, next) => {
       if (String(card.owner) !== userId) {
         throw new ForbiddenError('Удалить карточку может только владелец.');
       }
-      res.send('Карточка успешно удалена.');
+      res.send({ message: 'Карточка успешно удалена.' });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
