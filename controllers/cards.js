@@ -2,7 +2,7 @@ const Card = require('../models/card');
 
 const NotFoundError = require('../errors/not-found-error');
 const ValidationError = require('../errors/validation-error');
-const ForbiddenError = require('../errors/validation-error');
+const ForbiddenError = require('../errors/forbidden-error');
 
 const getAllCards = (req, res, next) => {
   Card.find({})
@@ -27,7 +27,7 @@ const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   const { userId } = req.user._id;
 
-  Card.findByIdAndRemove(cardId, userId)
+  Card.findByIdAndRemove(cardId)
     .orFail(new NotFoundError('Запрашиваемая карточка не найдена.')) // если БД возвращает пустой обьект
     .then((card) => {
       if (String(card.owner) !== userId) {
