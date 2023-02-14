@@ -11,7 +11,7 @@
 - Celebrate/Joi
 - Winston
 
-for dev
+for development
 - ESLint
 - Nodemon
 
