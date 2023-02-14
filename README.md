@@ -3,7 +3,7 @@
 
 [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 
-## Technologies and libraries:
+### Technologies and libraries
 
 - Express
 - MongoDB
@@ -11,11 +11,11 @@
 - Celebrate/Joi
 - Winston
 
-***for dev***
-- Eslint
+for dev
+- ESLint
 - Nodemon
 
-## Main directories:
+### Main directories
 
 `/routes`  
 `/controllers` <br/> 
@@ -24,7 +24,7 @@
 `/errors`
 
 
-## Routers:
+### Routers
 |API request| Router | Aim |
 | ------------- | ------------- |------------- |
 | POST | `/signin` | authorization|
@@ -39,9 +39,9 @@
 | PATCH |`/users/me/avatar`| update the user`s avatar|
   
 
-## Start the project:
+### Start the project
 
 `npm run start` — start the server  <br/>
 `npm run dev` — start the server with hot-reload
 
-## [Link to the project](https://github.com/proactative/express-mesto-gha)
+[Link to the project](https://github.com/proactative/express-mesto-gha)
