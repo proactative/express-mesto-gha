@@ -1,18 +1,47 @@
-[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+
+# Project **Mesto** backend
+
+[![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+
+## Technologies and libraries:
+
+- Express
+- MongoDB
+- Mongoose
+- Celebrate/Joi
+- Winston
+
+***for dev***
+- Eslint
+- Nodemon
+
+## Main directories:
+
+`/routes`  
+`/controllers` <br/> 
+`/models`  <br/>
+`/middlewares` <br/>
+`/errors`
 
 
-## Директории
-
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
+## Routers:
+|API request| Router | Aim |
+| ------------- | ------------- |------------- |
+| POST | `/signin` | authorization|
+| POST |`/signup` | registration|
+| GET |`/users/me`|  get information about the user|
+| GET |`/cards` |get all cards|
+| POST |`/cards`  |add a card|
+| PUT |`/cards/:cardId/likes`| put 'like'|
+| DELETE| `/cards/:cardId/likes`| remove 'like'|
+| DELETE |`/cards/:cardId` |delete the card|
+| PATCH |`/users/me`| update the user`s profile|
+| PATCH |`/users/me/avatar`| update the user`s avatar|
   
-Остальные директории вспомогательные, создаются при необходимости разработчиком
 
-## Запуск проекта
+## Start the project:
 
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
+`npm run start` — start the server  <br/>
+`npm run dev` — start the server with hot-reload
 
 ## [Link to the project](https://github.com/proactative/express-mesto-gha)
