@@ -1,7 +1,9 @@
 
-# Project **Mesto** backend
+# Project "Mesto" backend
 
 [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+![shield](https://img.shields.io/badge/status-release-brightgreen)
+![shield](https://img.shields.io/badge/version-1.0.0-blue)
 
 ### Technologies and libraries
 
@@ -43,5 +45,3 @@ for development
 
 `npm run start` — start the server  <br/>
 `npm run dev` — start the server with hot-reload
-
-[Link to the project](https://github.com/proactative/express-mesto-gha)
