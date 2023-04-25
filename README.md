@@ -1,9 +1,12 @@
 
 # Project "Mesto" backend
-
-[![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 ![shield](https://img.shields.io/badge/status-release-brightgreen)
 ![shield](https://img.shields.io/badge/version-1.0.0-blue)
+
+### Tests
+[![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+
+
 
 ### Technologies and libraries
 
